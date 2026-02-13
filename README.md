@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Bookmark App
 
-## Getting Started
+A real-time, private bookmark manager built with **Next.js (App Router)**, **Supabase**, and **Tailwind CSS**.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Google OAuth**: Secure login using your Google account.
+- **Real-time Sync**: Add/delete bookmarks in one tab and see them update instantly in others.
+- **Privacy**: Each user's bookmarks are private and protected using Supabase Row Level Security (RLS).
+- **Modern UI**: A premium, responsive design with dark mode and smooth animations.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 15+ (App Router)
+- **Database & Auth**: Supabase
+- **Styling**: Tailwind CSS v4
+- **Icons**: Lucide React
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Setup Instructions
 
-## Learn More
+### 1. Supabase Project Setup
 
-To learn more about Next.js, take a look at the following resources:
+1. Create a new project at [supabase.com](https://supabase.com).
+2. Go to **Authentication > Providers** and enable **Google**. 
+   - You will need to configure the Google Cloud Console with the redirect URI provided by Supabase.
+3. In the **SQL Editor**, run the script provided in `supabase_schema.sql` (found in the artifacts) to create the `bookmarks` table and set up RLS.
+4. Go to **Project Settings > API** (the gear icon on the left sidebar).
+   - **Project URL**: Copy the value under "Project URL".
+   - **anon public**: Copy the value under "API Key (anon public)".
+   - *Note: Do NOT use the `service_role` key here.*
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. Local Environment Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env.local` file in the root and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-project-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+## Problems Encountered & Solutions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 1. Next.js Directory Naming
+- **Problem**: Lowercase directory names are required by npm for project initialization via `create-next-app`.
+- **Solution**: Initialized the project in a temporary directory and moved the files to the workspace root.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 2. Next.js 15+ Cookie API Changes
+- **Problem**: The `cookies().set()` API in Next.js 15+ changed its signature, causing lint errors in the Supabase middleware template.
+- **Solution**: Updated the middleware to use the object syntax `{ name, value, ...options }` for the `cookies.set` method.
+
+### 3. Tailwind CSS v4 Migration
+- **Problem**: Next.js 15 uses Tailwind v4 by default, which has a different configuration structure than v3.
+- **Solution**: Adapted the design to use v4-compatible imports and kept the configuration minimal as v4 handles most things automatically via CSS imports.
+
+---
+
+Built with ❤️ by Antigravity.
