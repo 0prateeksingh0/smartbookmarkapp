@@ -48,18 +48,24 @@ A real-time, private bookmark manager built with **Next.js (App Router)**, **Sup
 
 ## Problems Encountered & Solutions
 
-### 1. Next.js Directory Naming
-- **Problem**: Lowercase directory names are required by npm for project initialization via `create-next-app`.
-- **Solution**: Initialized the project in a temporary directory and moved the files to the workspace root.
+The integration with Supabase was generally straightforward, but a few modern framework quirks required attention:
 
-### 2. Next.js 15+ Cookie API Changes
-- **Problem**: The `cookies().set()` API in Next.js 15+ changed its signature, causing lint errors in the Supabase middleware template.
-- **Solution**: Updated the middleware to use the object syntax `{ name, value, ...options }` for the `cookies.set` method.
+### 1. Next.js 16 Proxy Migration
+- **Problem**: Next.js 16 deprecated `middleware.ts` in favor of `proxy.ts`, causing build warnings.
+- **Solution**: Migrated the middleware logic to `src/proxy.ts` and updated the export to follow the new convention.
 
-### 3. Tailwind CSS v4 Migration
-- **Problem**: Next.js 15 uses Tailwind v4 by default, which has a different configuration structure than v3.
-- **Solution**: Adapted the design to use v4-compatible imports and kept the configuration minimal as v4 handles most things automatically via CSS imports.
+### 2. Hydration Mismatch
+- **Problem**: Browser extensions adding attributes to the `<body>` caused React hydration errors.
+- **Solution**: Added `suppressHydrationWarning` to the root layout to ignore non-critical DOM mismatches caused by external tools.
+
+### 3. Real-time Delete Sync
+- **Problem**: Real-time deletion events weren't triggering UI updates when using user-level filters.
+- **Solution**: Enabled `REPLICA IDENTITY FULL` on the `bookmarks` table to ensures that delete events broadcast the full record needed for client-side filtering.
+
+### 4. Boilerplate Setup
+- **Problem**: Next.js 15+ defaults (v4 Tailwind, new Cookie API) differ from older templates.
+- **Solution**: Manually updated the Supabase middleware and CSS utility imports to align with the latest stable versions of these dependencies.
 
 ---
 
-Built with ❤️ by Antigravity.
+Built with ❤️ by Antigravity. Always a smooth experience building with Supabase.
