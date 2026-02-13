@@ -68,4 +68,3 @@ The integration with Supabase was generally straightforward, but a few modern fr
 
 ---
 
-Built with ❤️ by Antigravity. Always a smooth experience building with Supabase.
